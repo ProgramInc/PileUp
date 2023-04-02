@@ -4,15 +4,20 @@ using UnityEngine;
 
 public class BlockSpawner : MonoBehaviour
 {
+    public static BlockSpawner Instance;
     [SerializeField] GameObject blockPrefab;
     [SerializeField] float xOffsetInstantiantion = -2.3f;
     [SerializeField] float spawnDelay;
     [SerializeField] Sprite[] blockSprites;
     GameObject currentBlock;
-    List<GameObject> activeBlocks = new List<GameObject>();
+    public List<GameObject> ActiveBlocks { get; private set; } = new List<GameObject>();
     public delegate void BlockReleasedAction();
     public static BlockReleasedAction OnBlockReleased;
 
+    private void Awake()
+    {
+        Instance = this;
+    }
     private void OnEnable()
     {
         OnBlockReleased += SpawnNewBlockWrapper;
@@ -31,7 +36,7 @@ public class BlockSpawner : MonoBehaviour
     {
         if (!LevelManager.Instance.isLevelFailed)
         {
-            foreach (GameObject block in activeBlocks)
+            foreach (GameObject block in ActiveBlocks)
             {
                 if (block.transform.position.y < -5)
                 {
@@ -58,7 +63,7 @@ public class BlockSpawner : MonoBehaviour
         }
         currentBlock = Instantiate(blockPrefab, new Vector3(xOffsetInstantiantion, gameObject.transform.position.y, 0), Quaternion.identity);
         currentBlock.GetComponent<SpriteRenderer>().sprite = blockSprites[Random.Range(0, blockSprites.Length)];
-        activeBlocks.Add(currentBlock);
+        ActiveBlocks.Add(currentBlock);
     }
 
     void DestroyCurrentBlock()

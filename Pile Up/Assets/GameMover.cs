@@ -8,7 +8,7 @@ public class GameMover : MonoBehaviour
     [SerializeField] float moveUpSpeed;
     [SerializeField] GameObject moveContainer;
     [SerializeField] float moveUpOffset;
-
+    [SerializeField] int heightToStartMoving;
     private void OnEnable()
     {
         BlockSpawner.OnBlockReleased += MoveUpWrapper;
@@ -27,7 +27,14 @@ public class GameMover : MonoBehaviour
 
     private void MoveUpWrapper()
     {
-        StartCoroutine(nameof(MoveGameUp));
+        if (BlockSpawner.Instance.ActiveBlocks.Count < heightToStartMoving)
+        {
+            return;
+        }
+        else
+        {
+            StartCoroutine(nameof(MoveGameUp));
+        }
     }
 
     private IEnumerator MoveGameUp()
@@ -36,7 +43,7 @@ public class GameMover : MonoBehaviour
         while (currentHeight < nextHeight)
         {
             currentHeight += Time.deltaTime * moveUpSpeed;
-            moveContainer.transform.position = new Vector3(0,currentHeight,-10);
+            moveContainer.transform.position = new Vector3(0, currentHeight, -10);
             yield return null;
         }
     }

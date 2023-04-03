@@ -7,6 +7,7 @@ public class BlockMover : MonoBehaviour
     Rigidbody2D rb;
     [SerializeField] float moveSpeed;
     public float maxOffset;
+    
 
     void Start()
     {

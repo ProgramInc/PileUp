@@ -16,7 +16,7 @@ public class GameMover : MonoBehaviour
 
     private void OnDisable()
     {
-        BlockSpawner.OnBlockReleased += MoveUpWrapper;
+        BlockSpawner.OnBlockReleased -= MoveUpWrapper;
     }
 
     void Start()

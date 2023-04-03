@@ -5,7 +5,7 @@ using UnityEngine;
 public class LevelManager : MonoBehaviour
 {
     public delegate void LevelFailedAction();
-    public static LevelFailedAction OnlevelFailed;
+    public static event LevelFailedAction OnlevelFailed;
     public bool isLevelFailed { get; private set; }
 
     public static LevelManager Instance;
@@ -29,5 +29,28 @@ public class LevelManager : MonoBehaviour
     {
         isLevelFailed = true;
         print("LevelFailed");
+    }
+
+    private void Update()
+    {
+        if (!isLevelFailed)
+        {
+            foreach (GameObject block in BlockSpawner.Instance.ActiveBlocks)
+            {
+                if (block.transform.position.y < -5)
+                {
+                    /*isLevelFailed = true;*/
+                    OnlevelFailed?.Invoke();
+                    break;
+                }
+            }
+        }
+        if (Platform.Instance.BlocksOnPlatform.Count > 1)
+        {
+            if (!isLevelFailed)
+            {
+                OnlevelFailed?.Invoke();
+            }
+        }
     }
 }

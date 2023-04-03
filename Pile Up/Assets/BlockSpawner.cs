@@ -21,10 +21,12 @@ public class BlockSpawner : MonoBehaviour
     private void OnEnable()
     {
         OnBlockReleased += SpawnNewBlockWrapper;
+        LevelManager.OnlevelFailed += DestroyCurrentBlock;
     }
     private void OnDisable()
     {
         OnBlockReleased -= SpawnNewBlockWrapper;
+        LevelManager.OnlevelFailed -= DestroyCurrentBlock;
     }
 
     void Start()
@@ -32,25 +34,12 @@ public class BlockSpawner : MonoBehaviour
         SpawnNewBlockWrapper();
     }
 
-    void Update()
+    void SpawnNewBlockWrapper()
     {
         if (!LevelManager.Instance.isLevelFailed)
         {
-            foreach (GameObject block in ActiveBlocks)
-            {
-                if (block.transform.position.y < -5)
-                {
-                    LevelManager.OnlevelFailed?.Invoke();
-                    DestroyCurrentBlock();
-                    break;
-                }
-            }
+            StartCoroutine(nameof(SpawnNewBlock)); 
         }
-    }
-
-    void SpawnNewBlockWrapper()
-    {
-        StartCoroutine(nameof(SpawnNewBlock));
     }
 
     private IEnumerator SpawnNewBlock()
@@ -58,8 +47,15 @@ public class BlockSpawner : MonoBehaviour
         float spawnTimer = spawnDelay;
         while (spawnTimer > 0)
         {
-            spawnTimer -= Time.deltaTime;
-            yield return null;
+            if (LevelManager.Instance.isLevelFailed)
+            {
+                yield break;
+            }
+            else
+            {
+                spawnTimer -= Time.deltaTime;
+                yield return null; 
+            }
         }
         currentBlock = Instantiate(blockPrefab, new Vector3(xOffsetInstantiantion, gameObject.transform.position.y, 0), Quaternion.identity);
         currentBlock.GetComponent<SpriteRenderer>().sprite = blockSprites[Random.Range(0, blockSprites.Length)];

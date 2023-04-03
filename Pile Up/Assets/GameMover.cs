@@ -8,7 +8,7 @@ public class GameMover : MonoBehaviour
     [SerializeField] float moveUpSpeed;
     [SerializeField] GameObject moveContainer;
     [SerializeField] float moveUpOffset;
-    [SerializeField] int heightToStartMoving;
+    [SerializeField] int moveUpAfter;
     private void OnEnable()
     {
         BlockSpawner.OnBlockReleased += MoveUpWrapper;
@@ -27,7 +27,7 @@ public class GameMover : MonoBehaviour
 
     private void MoveUpWrapper()
     {
-        if (BlockSpawner.Instance.ActiveBlocks.Count < heightToStartMoving)
+        if (BlockSpawner.Instance.ActiveBlocks.Count < moveUpAfter)
         {
             return;
         }

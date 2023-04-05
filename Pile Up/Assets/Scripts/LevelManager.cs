@@ -7,7 +7,7 @@ public class LevelManager : MonoBehaviour
     public delegate void LevelFailedAction();
     public static event LevelFailedAction OnlevelFailed;
     public bool isLevelFailed { get; private set; }
-
+    [SerializeField] GameObject pauseButton;
     public static LevelManager Instance;
 
     private void Awake()
@@ -18,11 +18,13 @@ public class LevelManager : MonoBehaviour
     private void OnEnable()
     {
         OnlevelFailed += LevelFailed;
+        OnlevelFailed += HidePauseButton;
     }
 
     private void OnDisable()
     {
         OnlevelFailed -= LevelFailed;
+        OnlevelFailed -= HidePauseButton;
     }
 
     private void LevelFailed()
@@ -52,5 +54,10 @@ public class LevelManager : MonoBehaviour
                 OnlevelFailed?.Invoke();
             }
         }
+    }
+
+    void HidePauseButton()
+    {
+        pauseButton.SetActive(false);
     }
 }

@@ -7,6 +7,10 @@ public class GameManager : MonoBehaviour
 {
     public void RestartGame()
     {
+        if (Time.timeScale == 0)
+        {
+            Time.timeScale = 1;
+        }
         SceneManager.LoadScene(0);
     }
 
@@ -16,12 +20,9 @@ public class GameManager : MonoBehaviour
         {
             Time.timeScale = 0;
         }
-        else
+        else if (Time.timeScale == 0)
         {
-            if (Time.timeScale == 0)
-            {
-                Time.timeScale = 1;
-            }
+            Time.timeScale = 1;
         }
     }
 }

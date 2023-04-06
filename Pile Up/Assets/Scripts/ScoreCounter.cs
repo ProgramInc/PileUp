@@ -51,6 +51,7 @@ public class ScoreCounter : MonoBehaviour
         {
             HighScore = CurrentScore;
         }
+        AudioSFXManager.Instance.PlaySFX(Random.Range(0, 2));
     }
 
     void UnshowScore()

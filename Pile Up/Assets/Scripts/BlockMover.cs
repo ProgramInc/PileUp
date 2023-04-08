@@ -5,13 +5,16 @@ using UnityEngine;
 public class BlockMover : MonoBehaviour
 {
     Rigidbody2D rb;
-    [SerializeField] float moveSpeed;
+    /*[SerializeField] float minMoveSpeed;
+    [SerializeField] float maxMoveSpeed;*/
+    [SerializeField]float moveSpeed;
     public float maxOffset;
-    
+    float startTime;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        moveSpeed += ScoreCounter.Instance.CurrentScore * 0.005f;
     }
 
     private void Update()
@@ -29,7 +32,8 @@ public class BlockMover : MonoBehaviour
     {
         if (rb.isKinematic)
         {
-            rb.MovePosition(new Vector2(Mathf.Lerp(maxOffset, -maxOffset, Mathf.PingPong(Time.time * moveSpeed, 1)), transform.position.y));
+            rb.MovePosition(new Vector2(Mathf.Lerp(maxOffset, -maxOffset, Mathf.PingPong(startTime * moveSpeed, 1)), transform.position.y));
         }
+        startTime += Time.fixedDeltaTime;
     }
 }

@@ -30,7 +30,6 @@ public class LevelManager : MonoBehaviour
     private void LevelFailed()
     {
         isLevelFailed = true;
-        print("LevelFailed");
     }
 
     private void Update()
